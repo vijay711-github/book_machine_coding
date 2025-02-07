@@ -259,8 +259,8 @@ function App() {
               {editingBook ? 'Update Book' : 'Add Book'}
             </button>
             {editingBook && (
-              <button 
-                type="button" 
+              <button
+                type="button"
                 className="secondary-button"
                 onClick={() => {
                   setEditingBook(null);
@@ -322,19 +322,19 @@ function App() {
                     <td>{book.publisher}</td>
                     <td>{book.age}</td>
                     <td className="action-buttons">
-                      <button 
+                      <button
                         onClick={() => window.open(book.url, '_blank')}
                         className="view-button"
                       >
                         View
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleEdit(book)}
                         className="edit-button"
                       >
                         Edit
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleDelete(book.id)}
                         className="delete-button"
                       >
@@ -348,6 +348,10 @@ function App() {
           </div>
         )}
       </div>
+
+      <footer className="footer">
+        <p>&copy; {new Date().getFullYear()} Vijay - 2025. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
