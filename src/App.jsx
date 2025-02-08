@@ -59,13 +59,27 @@ function App() {
     localStorage.setItem('books', JSON.stringify(books));
   }, [books]);
 
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'title':
+        return value.trim() ? '' : 'Title is required';
+      case 'author':
+        return value.trim() ? '' : 'Author is required';
+      case 'email':
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Invalid email format';
+      case 'age':
+        return !isNaN(value) && Number(value) > 0 ? '' : 'Age must be a positive number';
+      default:
+        return '';
+    }
+  };
+
   const validateForm = () => {
     let tempErrors = {};
-    tempErrors.title = newBook.title ? '' : 'Title is required';
-    tempErrors.author = newBook.author ? '' : 'Author is required';
-    tempErrors.email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newBook.email) ? '' : 'Invalid email format';
-    tempErrors.age = !isNaN(newBook.age) && newBook.age > 0 ? '' : 'Age must be a positive number';
-
+    tempErrors.title = validateField('title', newBook.title);
+    tempErrors.author = validateField('author', newBook.author);
+    tempErrors.email = validateField('email', newBook.email);
+    tempErrors.age = validateField('age', newBook.age);
     setErrors(tempErrors);
     return Object.values(tempErrors).every(x => x === '');
   };
@@ -76,6 +90,7 @@ function App() {
       ...prev,
       [name]: value
     }));
+    setErrors(prev => ({ ...prev, [name]: validateField(name, value) }));
   };
 
   const handleImageChange = (e) => {
@@ -249,7 +264,11 @@ function App() {
             {errors.image && <span className="error">{errors.image}</span>}
             {imagePreview && (
               <div className="image-preview">
-                <img src={imagePreview} alt="Preview" />
+                <img 
+                  src={imagePreview} 
+                  alt="Preview" 
+                  style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+                />
               </div>
             )}
           </div>
@@ -259,8 +278,8 @@ function App() {
               {editingBook ? 'Update Book' : 'Add Book'}
             </button>
             {editingBook && (
-              <button
-                type="button"
+              <button 
+                type="button" 
                 className="secondary-button"
                 onClick={() => {
                   setEditingBook(null);
@@ -322,19 +341,19 @@ function App() {
                     <td>{book.publisher}</td>
                     <td>{book.age}</td>
                     <td className="action-buttons">
-                      <button
+                      <button 
                         onClick={() => window.open(book.url, '_blank')}
                         className="view-button"
                       >
                         View
                       </button>
-                      <button
+                      <button 
                         onClick={() => handleEdit(book)}
                         className="edit-button"
                       >
                         Edit
                       </button>
-                      <button
+                      <button 
                         onClick={() => handleDelete(book.id)}
                         className="delete-button"
                       >
